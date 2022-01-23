@@ -23,6 +23,36 @@ router.post("/register", async (req, res) => {
     const saveduser = user.save();
     res.status(200).json(saveduser);
 })
+router.post("/addfriend/:id", async (req, res) => {
+    const friend = await User.findById(req.params.id);
+    const user = await User.findById(req.body.userid);
+    if(!friend){
+        return res.status(404).json("user not found");
+    }
+    try {
+        await user.updateOne({ $push : {friendlist : req.params.id}})
+        await friend.updateOne({ $push : {friendlist : req.body.userid}})
+        res.status(200).json("user added to friendlist");
+    } catch (error) {
+
+    }
+})
+router.get("/getfriends", async(req, res) => {
+    const user = await User.findOne({username : req.body.username});
+    try {
+        const friendlist = user.friendlist;
+        res.status(200).json(friendlist);
+    } catch (error) {
+
+    }
+})
+router.put("/deletefriend/:id", async(req, res) => {
+    const user = await User.findById(req.params.id);
+    const friend = await User.findById(req.body.userid);
+    await user.updateOne({ $pull : {friendlist : req.body.userid}});
+    await friend.updateOne({ $pull : {friendlist : req.params.id}});
+    return res.status(200).json(user);
+})
 router.post("/login", async(req, res) => {
     const user = await User.findOne({email: req.body.email});
     if(!user){
