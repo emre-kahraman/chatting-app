@@ -23,6 +23,7 @@ node index.js
   - [POST /api/message/addMessage](#add-message)
   - [GET /api/message/findMessage/:conversation](#find-message)
   - [GET /api/message/searchMessage/:text](#search-message)
+  - [POST /api/chat/addChat](#add-chat)
 
 ## Get Users
 
@@ -132,4 +133,108 @@ POST /api/user/login
     "friendlist": [],
     "__v": 0,
     "token": "eyJhbGciOiJIUzI1NiJ9.dGVzdEBnbWFpbC5jb20.ndABZG7XtdL0FAA-HFGc5RatvoPzRHJ2FwPntu9GffM"
-}
+    }
+
+## Add Message
+
+### Request
+
+POST /api/message/addMessage
+
+    curl --location --request POST 'localhost:5000/api/message/addMessage' \--header 'Content-Type: text/plain' \--data-raw '{"sender": "62444229da59d3de54257d7a","conversation": "6244561aef7e1b875bada74f",""text": "test message"}'
+
+### Response
+
+    {
+    "sender": "62444229da59d3de54257d7a",
+    "conversation": "6244561aef7e1b875bada74f",
+    "text": "test message",
+    "_id": "624457bd2a67e41959d18116",
+    "createdAt": "2022-03-30T13:14:37.385Z",
+    "updatedAt": "2022-03-30T13:14:37.385Z",
+    "__v": 0
+    }
+
+## Find Message
+
+### Request
+
+GET /api/message/findMessage/:conversation
+
+    curl --location --request GET 'localhost:5000/api/message/findMessage/6244561aef7e1b875bada74f'
+
+### Response
+
+    [
+    {
+        "_id": "624457bd2a67e41959d18116",
+        "sender": "62444229da59d3de54257d7a",
+        "conversation": "6244561aef7e1b875bada74f",
+        "text": "test message",
+        "createdAt": "2022-03-30T13:14:37.385Z",
+        "updatedAt": "2022-03-30T13:14:37.385Z",
+        "__v": 0
+    }
+    ]
+
+## Search Message
+
+### Request
+
+GET /api/message/searchMessage/:text
+
+    curl --location --request GET 'localhost:5000/api/message/searchMessage/test message'
+
+### Response
+
+    [
+    {
+        "_id": "624457bd2a67e41959d18116",
+        "sender": "62444229da59d3de54257d7a",
+        "conversation": "6244561aef7e1b875bada74f",
+        "text": "test message",
+        "createdAt": "2022-03-30T13:14:37.385Z",
+        "updatedAt": "2022-03-30T13:14:37.385Z",
+        "__v": 0
+    }
+    ]
+
+## Add Chat
+
+### Request
+
+POST /api/chat/addChat
+
+    curl --location --request POST 'localhost:5000/api/chat/addChat' \--header 'Content-Type: application/json' \--data-raw '{"user1": "62444229da59d3de54257d7a","user2": "6244410b8a754cd6da293afc"}'
+
+### Response
+
+    {
+    "users": [
+        "62444229da59d3de54257d7a",
+        "6244410b8a754cd6da293afc"
+    ],
+    "_id": "6244561aef7e1b875bada74f",
+    "__v": 0
+    }
+
+## Find Chat
+
+### Request
+
+POST /api/chat/findChat/:userId
+
+    curl --location --request GET 'localhost:5000/api/chat/findChat/62444229da59d3de54257d7a'
+
+### Response
+
+    [
+    {
+        "_id": "6244561aef7e1b875bada74f",
+        "users": [
+            "62444229da59d3de54257d7a",
+            "6244410b8a754cd6da293afc"
+        ],
+        "__v": 0
+    }
+    ]
