@@ -60,7 +60,7 @@ GET /api/user/getUsers
 
 POST /api/user/register
 
-    curl --location --request POST 'localhost:5000/api/user/register' \--header 'Content-Type: application/json' \--data-raw '{"username":"testuser","password":"testuser", "email": "testuser@gmail.com"}'
+    curl --location --request POST 'localhost:5000/api/user/register' \--header 'Content-Type: application/json' \--data-raw '{"username":"test","password":"test", "email": "test@gmail.com"}'
     
 ### Response
     {
