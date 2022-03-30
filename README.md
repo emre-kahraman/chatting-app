@@ -217,11 +217,3 @@ POST /api/chat/addChat
     "_id": "6244561aef7e1b875bada74f",
     "__v": 0
     }
-
-## Find Chat
-
-### Request
-
-GET /api/chat/findChat/:userId
-
-    curl --location --request GET 'localhost:5000/api/chat/findChat/62444229da59d3de54257d7a'
