@@ -9,7 +9,7 @@ router.get("/getUsers", async(req, res) => {
         res.status(200).json(users);
     }
     catch (error){
-        res.status(500);
+        res.status(500).json(error);
     }
 })
 router.post("/register", async (req, res) => {
@@ -20,10 +20,10 @@ router.post("/register", async (req, res) => {
         return res.status(409);
     }
     user.password = await bcrypt.hash(user.password,10);
-    const saveduser = user.save();
+    const saveduser = awaituser.save();
     res.status(200).json(saveduser);
 })
-router.post("/addfriend/:id", async (req, res) => {
+router.post("/addFriend/:id", async (req, res) => {
     const friend = await User.findById(req.params.id);
     const user = await User.findById(req.body.userid);
     if(!friend){
@@ -34,24 +34,28 @@ router.post("/addfriend/:id", async (req, res) => {
         await friend.updateOne({ $push : {friendlist : req.body.userid}})
         res.status(200).json("user added to friendlist");
     } catch (error) {
-
+        res.status(500).json(error);
     }
 })
-router.get("/getfriends", async(req, res) => {
-    const user = await User.findOne({username : req.body.username});
+router.get("/getFriends/:id", async(req, res) => {
+    const user = await User.findById(req.params.id);
     try {
         const friendlist = user.friendlist;
         res.status(200).json(friendlist);
     } catch (error) {
-
+        res.status(500).json(error);
     }
 })
-router.put("/deletefriend/:id", async(req, res) => {
+router.put("/deleteFriend/:id", async(req, res) => {
     const user = await User.findById(req.params.id);
     const friend = await User.findById(req.body.userid);
-    await user.updateOne({ $pull : {friendlist : req.body.userid}});
-    await friend.updateOne({ $pull : {friendlist : req.params.id}});
-    return res.status(200).json(user);
+    try {
+        await user.updateOne({ $pull : {friendlist : req.body.userid}});
+        await friend.updateOne({ $pull : {friendlist : req.params.id}});
+        return res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json(error);
+    }
 })
 router.post("/login", async(req, res) => {
     const user = await User.findOne({email: req.body.email});
@@ -66,7 +70,7 @@ router.post("/login", async(req, res) => {
     user.token = jwt.sign(user.email, process.env.TOKEN_KEY);
     res.status(200).json(user);}
     catch (error){
-        res.status(500);
+        res.status(500).json(error);
     }
 })
 module.exports = router;
