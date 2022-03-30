@@ -24,7 +24,6 @@ node index.js
   - [GET /api/message/findMessage/:conversation](#find-message)
   - [GET /api/message/searchMessage/:text](#search-message)
   - [POST /api/chat/addChat](#add-chat)
-  - [GET /api/chat/findChat/:userId](#find-chat)
 
 ## Get Users
 
@@ -218,24 +217,3 @@ POST /api/chat/addChat
     "_id": "6244561aef7e1b875bada74f",
     "__v": 0
     }
-
-## Find Chat
-
-### Request
-
-GET /api/chat/findChat/:userId
-
-    curl --location --request GET 'localhost:5000/api/chat/findChat/62444229da59d3de54257d7a'
-
-### Response
-
-    [
-    {
-        "_id": "6244561aef7e1b875bada74f",
-        "users": [
-            "62444229da59d3de54257d7a",
-            "6244410b8a754cd6da293afc"
-        ],
-        "__v": 0
-    }
-    ]
