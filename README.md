@@ -24,6 +24,7 @@ node index.js
   - [GET /api/message/findMessage/:conversation](#find-message)
   - [GET /api/message/searchMessage/:text](#search-message)
   - [POST /api/chat/addChat](#add-chat)
+  - [GET /api/chat/findChat/:userId](#find-chat)
 
 ## Get Users
 
@@ -102,7 +103,7 @@ GET /api/user/getFriends/:id
 
 PUT /api/user/deleteFriend/:id
  
-     curl --location --request POST 'localhost:5000/api/user/deletefriend/62444229da59d3de54257d7a' \--header 'Content-Type: application/json' \--data-raw '{"userid": "6244410b8a754cd6da293afc"}'
+     curl --location --request PUT 'localhost:5000/api/user/deletefriend/62444229da59d3de54257d7a' \--header 'Content-Type: application/json' \--data-raw '{"userid": "6244410b8a754cd6da293afc"}'
 
 ### Response
 
@@ -222,7 +223,7 @@ POST /api/chat/addChat
 
 ### Request
 
-POST /api/chat/findChat/:userId
+GET /api/chat/findChat/:userId
 
     curl --location --request GET 'localhost:5000/api/chat/findChat/62444229da59d3de54257d7a'
 
