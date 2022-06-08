@@ -20,7 +20,7 @@ router.post("/register", async (req, res) => {
         return res.status(409);
     }
     user.password = await bcrypt.hash(user.password,10);
-    const saveduser = awaituser.save();
+    const saveduser = await user.save();
     res.status(200).json(saveduser);
 })
 router.post("/addFriend/:id", async (req, res) => {
@@ -32,7 +32,8 @@ router.post("/addFriend/:id", async (req, res) => {
     try {
         await user.updateOne({ $push : {friendlist : req.params.id}})
         await friend.updateOne({ $push : {friendlist : req.body.userid}})
-        res.status(200).json("user added to friendlist");
+        const updatedUser = await User.findById(req.body.userid);
+        res.status(200).json(updatedUser.friendlist);
     } catch (error) {
         res.status(500).json(error);
     }
@@ -46,13 +47,14 @@ router.get("/getFriends/:id", async(req, res) => {
         res.status(500).json(error);
     }
 })
-router.put("/deleteFriend/:id", async(req, res) => {
-    const user = await User.findById(req.params.id);
-    const friend = await User.findById(req.body.userid);
+router.delete("/deleteFriend/:id", async(req, res) => {
+    const user = await User.findById(req.body.userid);
+    const friend = await User.findById(req.params.id);
     try {
-        await user.updateOne({ $pull : {friendlist : req.body.userid}});
-        await friend.updateOne({ $pull : {friendlist : req.params.id}});
-        return res.status(200).json(user);
+        await user.updateOne({ $pull : {friendlist : req.params.id}});
+        await friend.updateOne({ $pull : {friendlist : req.body.userid}});
+        const updatedUser = await User.findById(req.body.userid);
+        res.status(200).json(updatedUser.friendlist);
     } catch (error) {
         res.status(500).json(error);
     }
