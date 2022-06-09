@@ -2,8 +2,9 @@ const User = require("../models/User.js");
 const router = require("express").Router();
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
+const auth = require("../middleware/auth.js");
 
-router.get("/getUsers", async(req, res) => {
+router.get("/getUsers", auth, async(req, res) => {
     try{
         const users = await User.find();
         res.status(200).json(users);
@@ -23,7 +24,7 @@ router.post("/register", async (req, res) => {
     const saveduser = await user.save();
     res.status(200).json(saveduser);
 })
-router.post("/addFriend/:id", async (req, res) => {
+router.post("/addFriend/:id", auth, async (req, res) => {
     const friend = await User.findById(req.params.id);
     const user = await User.findById(req.body.userid);
     if(!friend){
@@ -38,7 +39,7 @@ router.post("/addFriend/:id", async (req, res) => {
         res.status(500).json(error);
     }
 })
-router.get("/getFriends/:id", async(req, res) => {
+router.get("/getFriends/:id", auth, async(req, res) => {
     const user = await User.findById(req.params.id);
     try {
         const friendlist = user.friendlist;
@@ -47,7 +48,7 @@ router.get("/getFriends/:id", async(req, res) => {
         res.status(500).json(error);
     }
 })
-router.delete("/deleteFriend/:id", async(req, res) => {
+router.delete("/deleteFriend/:id", auth, async(req, res) => {
     const user = await User.findById(req.body.userid);
     const friend = await User.findById(req.params.id);
     try {
