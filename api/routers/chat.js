@@ -2,7 +2,7 @@ const chat = require("../models/Chat.js");
 const router = require("express").Router();
 const auth = require("../middleware/auth.js");
 
-router.post("/addChat", async(req, res) => {
+router.post("/addChat", auth, async(req, res) => {
     const newchat = new chat({
         users: [req.body.user1, req.body.user2],
     });

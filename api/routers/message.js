@@ -25,7 +25,7 @@ router.get("/findMessage/:conversation", auth, async(req, res) => {
     }
 })
 
-router.get("/searchMessage/:text", async(req,res) => {
+router.get("/searchMessage/:text", auth, async(req,res) => {
     try{
         const messages = await message.find({
             text: { $in: [req.params.text]}
