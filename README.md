@@ -20,6 +20,7 @@ node index.js
   - [GET /api/user/getFriends/:id](#get-friends)
   - [PUT /api/user/deleteFriend/:id](#delete-friend)
   - [POST /api/user/login](#login)
+  - [POST /api/user/logout](#logout)
   - [POST /api/message/addMessage](#add-message)
   - [GET /api/message/findMessage/:conversation](#find-message)
   - [GET /api/message/searchMessage/:text](#search-message)
@@ -30,7 +31,8 @@ node index.js
 ### Request
 GET /api/user/getUsers
 
-    curl --location --request GET 'localhost:5000/api/user/getUsers'
+    curl --location --request GET 'localhost:5000/api/user/getUsers' \
+    --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.dGVzdEBnbWFpbC5jb20.ndABZG7XtdL0FAA-HFGc5RatvoPzRHJ2FwPntu9GffM'
 
 ### Response 
 
@@ -77,10 +79,15 @@ POST /api/user/register
  
 POST /api/user/addFriend/:id
  
-     curl --location --request POST 'localhost:5000/api/user/addfriend/6244410b8a754cd6da293afc' \--header 'Content-Type: application/json' \--data-raw '{"userid":"62444229da59d3de54257d7a"}'
+     curl --location --request POST 'localhost:5000/api/user/addfriend/61ade606df1e44d8e945f4ed' \
+    --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.dGVzdEBnbWFpbC5jb20.ndABZG7XtdL0FAA-HFGc5RatvoPzRHJ2FwPntu9GffM' \
+    --header 'Content-Type: application/json' \
+    --data-raw '{ "userid": "62444229da59d3de54257d7a" }'
 
 ### Response
-    "user added to friendlist"
+    [
+    "61ade606df1e44d8e945f4ed"
+    ]
 
 ## Get Friends
 
@@ -88,12 +95,13 @@ POST /api/user/addFriend/:id
 
 GET /api/user/getFriends/:id
 
-    curl --location --request GET 'localhost:5000/api/user/getFriends/62444229da59d3de54257d7a'
+    curl --location --request GET 'localhost:5000/api/user/getfriends/61ade606df1e44d8e945f4ed' \
+    --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.dGVzdEBnbWFpbC5jb20.ndABZG7XtdL0FAA-HFGc5RatvoPzRHJ2FwPntu9GffM'
 
 ### Response
 
     [
-    "6244410b8a754cd6da293afc"
+    "62444229da59d3de54257d7a"
     ]
 
 ## Delete Friend
@@ -102,18 +110,14 @@ GET /api/user/getFriends/:id
 
 PUT /api/user/deleteFriend/:id
  
-     curl --location --request PUT 'localhost:5000/api/user/deletefriend/62444229da59d3de54257d7a' \--header 'Content-Type: application/json' \--data-raw '{"userid": "6244410b8a754cd6da293afc"}'
+     curl --location --request DELETE 'localhost:5000/api/user/deleteFriend/61ade606df1e44d8e945f4ed' \
+    --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.dGVzdEBnbWFpbC5jb20.ndABZG7XtdL0FAA-HFGc5RatvoPzRHJ2FwPntu9GffM' \
+    --header 'Content-Type: application/json' \
+    --data-raw '{ "userid": "62444229da59d3de54257d7a" }'
 
 ### Response
 
-    {
-    "_id": "62444229da59d3de54257d7a",
-    "username": "test",
-    "password": "$2b$10$bXSCt8R1S91K3sKslCm33OAhOKovMGEA0PNR0ZKzRvAHrLyBqyAp6",
-    "email": "test@gmail.com",
-    "friendlist": [],
-    "__v": 0
-    }
+    []
 
 ## Login
 
@@ -132,7 +136,32 @@ POST /api/user/login
     "email": "test@gmail.com",
     "friendlist": [],
     "__v": 0,
-    "token": "eyJhbGciOiJIUzI1NiJ9.dGVzdEBnbWFpbC5jb20.ndABZG7XtdL0FAA-HFGc5RatvoPzRHJ2FwPntu9GffM"
+    "token": "eyJhbGciOiJIUzI1NiJ9.dGVzdEBnbWFpbC5jb20.ndABZG7XtdL0FAA-HFGc5RatvoPzRHJ2FwPntu9GffM",
+    "online": true
+    }
+
+## Logout
+
+### Request
+
+POST /api/user/logout
+
+    curl --location --request POST 'localhost:5000/api/user/logout' \
+    --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.dGVzdEBnbWFpbC5jb20.ndABZG7XtdL0FAA-HFGc5RatvoPzRHJ2FwPntu9GffM' \
+    --header 'Content-Type: application/json' \
+    --data-raw '{ "email": "test@gmail.com" }'
+
+### Response
+
+    {
+    "_id": "62444229da59d3de54257d7a",
+    "username": "test",
+    "password": "$2b$10$bXSCt8R1S91K3sKslCm33OAhOKovMGEA0PNR0ZKzRvAHrLyBqyAp6",
+    "email": "test@gmail.com",
+    "friendlist": [],
+    "__v": 0,
+    "token": null,
+    "online": false
     }
 
 ## Add Message
@@ -141,7 +170,10 @@ POST /api/user/login
 
 POST /api/message/addMessage
 
-    curl --location --request POST 'localhost:5000/api/message/addMessage' \--header 'Content-Type: text/plain' \--data-raw '{"sender": "62444229da59d3de54257d7a","conversation": "6244561aef7e1b875bada74f",""text": "test message"}'
+    curl --location --request POST 'localhost:5000/api/message/addMessage' \
+    --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.dGVzdEBnbWFpbC5jb20.ndABZG7XtdL0FAA-HFGc5RatvoPzRHJ2FwPntu9GffM' \
+    --header 'Content-Type: application/json' \
+    --data-raw '{ "sender": "62444229da59d3de54257d7a", "conversation": "6244561aef7e1b875bada74f", "text": "test message" }'
 
 ### Response
 
@@ -149,9 +181,9 @@ POST /api/message/addMessage
     "sender": "62444229da59d3de54257d7a",
     "conversation": "6244561aef7e1b875bada74f",
     "text": "test message",
-    "_id": "624457bd2a67e41959d18116",
-    "createdAt": "2022-03-30T13:14:37.385Z",
-    "updatedAt": "2022-03-30T13:14:37.385Z",
+    "_id": "62c2ea648f2fec3558e34db8",
+    "createdAt": "2022-07-04T13:25:56.418Z",
+    "updatedAt": "2022-07-04T13:25:56.418Z",
     "__v": 0
     }
 
@@ -161,18 +193,19 @@ POST /api/message/addMessage
 
 GET /api/message/findMessage/:conversation
 
-    curl --location --request GET 'localhost:5000/api/message/findMessage/6244561aef7e1b875bada74f'
+    curl --location --request GET 'localhost:5000/api/message/findMessage/6244561aef7e1b875bada74f' \
+    --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.dGVzdEBnbWFpbC5jb20.ndABZG7XtdL0FAA-HFGc5RatvoPzRHJ2FwPntu9GffM'
 
 ### Response
 
     [
     {
-        "_id": "624457bd2a67e41959d18116",
+        "_id": "62c2ea648f2fec3558e34db8",
         "sender": "62444229da59d3de54257d7a",
         "conversation": "6244561aef7e1b875bada74f",
         "text": "test message",
-        "createdAt": "2022-03-30T13:14:37.385Z",
-        "updatedAt": "2022-03-30T13:14:37.385Z",
+        "createdAt": "2022-07-04T13:25:56.418Z",
+        "updatedAt": "2022-07-04T13:25:56.418Z",
         "__v": 0
     }
     ]
@@ -183,18 +216,19 @@ GET /api/message/findMessage/:conversation
 
 GET /api/message/searchMessage/:text
 
-    curl --location --request GET 'localhost:5000/api/message/searchMessage/test message'
+    curl --location --request GET 'localhost:5000/api/message/searchMessage/test message' \
+    --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.dGVzdEBnbWFpbC5jb20.ndABZG7XtdL0FAA-HFGc5RatvoPzRHJ2FwPntu9GffM'
 
 ### Response
 
     [
     {
-        "_id": "624457bd2a67e41959d18116",
+        "_id": "62c2ea648f2fec3558e34db8",
         "sender": "62444229da59d3de54257d7a",
         "conversation": "6244561aef7e1b875bada74f",
         "text": "test message",
-        "createdAt": "2022-03-30T13:14:37.385Z",
-        "updatedAt": "2022-03-30T13:14:37.385Z",
+        "createdAt": "2022-07-04T13:25:56.418Z",
+        "updatedAt": "2022-07-04T13:25:56.418Z",
         "__v": 0
     }
     ]
@@ -205,7 +239,10 @@ GET /api/message/searchMessage/:text
 
 POST /api/chat/addChat
 
-    curl --location --request POST 'localhost:5000/api/chat/addChat' \--header 'Content-Type: application/json' \--data-raw '{"user1": "62444229da59d3de54257d7a","user2": "6244410b8a754cd6da293afc"}'
+    curl --location --request POST 'localhost:5000/api/chat/addChat' \
+    --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.dGVzdEBnbWFpbC5jb20.ndABZG7XtdL0FAA-HFGc5RatvoPzRHJ2FwPntu9GffM' \
+    --header 'Content-Type: application/json' \
+    --data-raw '{ "user1": "62444229da59d3de54257d7a","user2": "6244410b8a754cd6da293afc" }'
 
 ### Response
 
