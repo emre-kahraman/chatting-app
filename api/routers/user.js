@@ -71,6 +71,20 @@ router.post("/login", async(req, res) => {
         return res.status(404).json("wrong password");
     }
     user.token = jwt.sign(user.email, process.env.TOKEN_KEY);
+    user.online = true;
+    res.status(200).json(user);}
+    catch (error){
+        res.status(500).json(error);
+    }
+})
+router.post("/logout", auth, async(req, res) => {
+    const user = await User.findOne({email: req.body.email});
+    if(!user){
+        return res.json("User not found.");
+    }
+    try{
+    user.token = null;
+    user.online = false;
     res.status(200).json(user);}
     catch (error){
         res.status(500).json(error);
