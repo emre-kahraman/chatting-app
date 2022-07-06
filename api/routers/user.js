@@ -3,6 +3,7 @@ const router = require("express").Router();
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 const auth = require("../middleware/auth.js");
+const redis = require("../config/redis.js");
 
 router.get("/getUsers", auth, async(req, res) => {
     try{
@@ -10,6 +11,21 @@ router.get("/getUsers", auth, async(req, res) => {
         res.status(200).json(users);
     }
     catch (error){
+        res.status(500).json(error);
+    }
+})
+router.get("/getOnlineUsers", auth, async(req, res) => {
+    let users = await redis.sMembers("online_users");
+    if(users.length==0){
+        return res.status(404).json(null);
+    }
+    if(users.length>1){
+        users = "[" + users + "]";
+    }
+    try {
+        const online_users = JSON.parse(users);
+        res.status(200).json(online_users);
+    } catch (error) {
         res.status(500).json(error);
     }
 })
@@ -72,6 +88,8 @@ router.post("/login", async(req, res) => {
     }
     user.token = jwt.sign(user.email, process.env.TOKEN_KEY);
     user.online = true;
+    await user.save();
+    redis.sAdd("online_users", JSON.stringify(user));
     res.status(200).json(user);}
     catch (error){
         res.status(500).json(error);
@@ -83,8 +101,10 @@ router.post("/logout", auth, async(req, res) => {
         return res.json("User not found.");
     }
     try{
+    redis.sRem("online_users", JSON.stringify(user));
     user.token = null;
     user.online = false;
+    await user.save();
     res.status(200).json(user);}
     catch (error){
         res.status(500).json(error);

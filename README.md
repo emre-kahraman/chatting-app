@@ -8,13 +8,14 @@ npm install
 
 # Run the app
 
-node index.js
+docker-compose up -d
 
 # REST API
 
 ## API Resources
 
   - [GET /api/user/getUsers](#get-users)
+  - [GET /api/user/getOnlineUsers](#get-online-users)
   - [POST /api/user/register](#register-user)
   - [POST /api/user/addFriend/:id](#add-friend)
   - [GET /api/user/getFriends/:id](#get-friends)
@@ -54,6 +55,27 @@ GET /api/user/getUsers
         "friendlist": []
     }
     ]
+
+## Get Online Users
+
+### Request
+GET /api/user/getOnlineUsers
+
+    curl --location --request GET 'localhost:5000/api/user/getOnlineUsers' \
+    --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.dGVzdEBnbWFpbC5jb20.ndABZG7XtdL0FAA-HFGc5RatvoPzRHJ2FwPntu9GffM'
+
+### Response 
+
+    {
+    "_id": "62444229da59d3de54257d7a",
+    "username": "test",
+    "password": "$2b$10$bXSCt8R1S91K3sKslCm33OAhOKovMGEA0PNR0ZKzRvAHrLyBqyAp6",
+    "email": "test@gmail.com",
+    "friendlist": [],
+    "__v": 0,
+    "online": true,
+    "token": "eyJhbGciOiJIUzI1NiJ9.dGVzdEBnbWFpbC5jb20.ndABZG7XtdL0FAA-HFGc5RatvoPzRHJ2FwPntu9GffM"
+    }
 
 ## Register User
 
