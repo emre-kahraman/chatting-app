@@ -8,7 +8,7 @@ npm install
 
 # Run the app
 
-docker-compose up -d
+    docker-compose up -d
 
 # REST API
 
