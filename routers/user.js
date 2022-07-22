@@ -86,11 +86,27 @@ router.post("/login", async(req, res) => {
     if(!password){
         return res.status(404).json("wrong password");
     }
-    user.token = jwt.sign(user.email, process.env.TOKEN_KEY);
+    const accessToken = jwt.sign({user: user.email}, process.env.TOKEN_KEY, { expiresIn: '30m'});
+    const refreshToken = jwt.sign({user: user.email}, process.env.TOKEN_KEY, { expiresIn: '1h'});
+    const token = {
+        accessToken: accessToken,
+        refreshToken: refreshToken};
     user.online = true;
     await user.save();
     redis.sAdd("online_users", JSON.stringify(user));
-    res.status(200).json(user);}
+    res.status(200).json(token);}
+    catch (error){
+        res.status(500).json(error);
+    }
+})
+router.post("/refreshToken", auth, async(req, res) => {
+    try{
+        const accessToken = jwt.sign({user: req.token.user}, process.env.TOKEN_KEY, { expiresIn: '30m'});
+        const refreshToken = jwt.sign({user: req.token.user}, process.env.TOKEN_KEY, { expiresIn: '1h'});
+        const token = {
+            accessToken: accessToken,
+            refreshToken: refreshToken};
+        res.status(200).json(token);}
     catch (error){
         res.status(500).json(error);
     }
@@ -102,7 +118,6 @@ router.post("/logout", auth, async(req, res) => {
     }
     try{
     redis.sRem("online_users", JSON.stringify(user));
-    user.token = null;
     user.online = false;
     await user.save();
     res.status(200).json(user);}
