@@ -74,8 +74,7 @@ GET /api/user/getOnlineUsers
     "email": "test@gmail.com",
     "friendlist": [],
     "__v": 0,
-    "online": true,
-    "token": "eyJhbGciOiJIUzI1NiJ9.dGVzdEBnbWFpbC5jb20.ndABZG7XtdL0FAA-HFGc5RatvoPzRHJ2FwPntu9GffM"
+    "online": true
     }
 
 ## Register User
@@ -193,7 +192,6 @@ POST /api/user/logout
     "email": "test@gmail.com",
     "friendlist": [],
     "__v": 0,
-    "token": null,
     "online": false
     }
 
