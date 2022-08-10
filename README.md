@@ -21,6 +21,7 @@ npm install
   - [GET /api/user/getFriends/:id](#get-friends)
   - [PUT /api/user/deleteFriend/:id](#delete-friend)
   - [POST /api/user/login](#login)
+  - [POST /api/user/refreshToken](#refresh-token)
   - [POST /api/user/logout](#logout)
   - [POST /api/message/addMessage](#add-message)
   - [GET /api/message/findMessage/:conversation](#find-message)
@@ -152,14 +153,24 @@ POST /api/user/login
 ### Response
 
     {
-    "_id": "62444229da59d3de54257d7a",
-    "username": "test",
-    "password": "$2b$10$bXSCt8R1S91K3sKslCm33OAhOKovMGEA0PNR0ZKzRvAHrLyBqyAp6",
-    "email": "test@gmail.com",
-    "friendlist": [],
-    "__v": 0,
-    "token": "eyJhbGciOiJIUzI1NiJ9.dGVzdEBnbWFpbC5jb20.ndABZG7XtdL0FAA-HFGc5RatvoPzRHJ2FwPntu9GffM",
-    "online": true
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidGVzdEBnbWFpbC5jb20iLCJpYXQiOjE2NjAxNTQyOTMsImV4cCI6MTY2MDE1NjA5M30.bXXZkzAx6jjB8lyjIX1XF1VQM0Hxq03hKQBG0E_2W6Y",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidGVzdEBnbWFpbC5jb20iLCJpYXQiOjE2NjAxNTQyOTMsImV4cCI6MTY2MDE1Nzg5M30.9KGtuCxIaA7nAoVZ4yyBjp_4zsyZYLxtOxFPN6niE8g"
+    }
+
+## RefreshToken
+
+### Request
+
+POST /api/user/refreshToken
+
+    curl --location --request POST 'localhost:5000/api/user/refreshToken' \
+    --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidGVzdEBnbWFpbC5jb20iLCJpYXQiOjE2NjAxNTQyOTMsImV4cCI6MTY2MDE1Nzg5M30.9KGtuCxIaA7nAoVZ4yyBjp_4zsyZYLxtOxFPN6niE8g'
+
+### Response
+
+    {
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidGVzdEBnbWFpbC5jb20iLCJpYXQiOjE2NjAxNTQzOTgsImV4cCI6MTY2MDE1NjE5OH0.2Y5_7HL2lji-UhXqkm3sO-IvvLpJCmAFOAoCbcuo5aU",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoidGVzdEBnbWFpbC5jb20iLCJpYXQiOjE2NjAxNTQzOTgsImV4cCI6MTY2MDE1Nzk5OH0.bIgA7wUcC-eYet5ozRkQuuSO0YH1ES4M7SfrRWgS6wM"
     }
 
 ## Logout
